@@ -1,95 +1,98 @@
-Traceroute Program in Python
 
-Overview
+# Traceroute Program in Python
 
-This project is a Python-based implementation of the traceroute network diagnostic tool. It utilizes ICMP (Internet Control Message Protocol) packets to trace the path that packets take to a destination. The program also calculates round-trip times (RTT), detects packet loss, and displays network hops along the route to the target.
+## Overview
 
-Features
+This project is a Python-based implementation of the **traceroute** network diagnostic tool. It utilizes ICMP (Internet Control Message Protocol) packets to trace the path that packets take to a destination. The program also calculates round-trip times (RTT), detects packet loss, and displays network hops along the route to the target.
 
-Implements ICMP echo requests to trace network routes.
+## Features
 
-Supports time-to-live (TTL) handling for hop-by-hop analysis.
+- **Implements ICMP echo requests** to trace network routes.
+- **Supports time-to-live (TTL) handling** for hop-by-hop analysis.
+- **Displays RTT (Round Trip Time) for each hop**.
+- **Detects packet loss and reports unreachable hosts**.
+- **Resolves IP addresses to hostnames where possible**.
+- **Identifies ICMP response types**, including TTL exceeded, unreachable destinations, and echo replies.
 
-Displays RTT (Round Trip Time) for each hop.
+## Installation
 
-Detects packet loss and reports unreachable hosts.
+### Prerequisites
 
-Resolves IP addresses to hostnames where possible.
+Ensure you have **Python 3.x** installed on your system.
 
-Identifies ICMP response types, including TTL exceeded, unreachable destinations, and echo replies.
+### Required Dependencies
 
-Installation
+This program uses Python's built-in modules:
 
-Prerequisites
+- `socket`
+- `struct`
+- `time`
+- `select`
 
-Ensure you have Python 3.x installed on your system.
+No external libraries are required.
 
-Required Dependencies
-
-This program uses Python's built-in socket, struct, time, and select modules. No external libraries are required.
-
-Usage
+## Usage
 
 To use the traceroute program, run the script from the terminal:
 
+```sh
 python traceroute.py
+```
 
-By default, the script contains example target hosts. To modify the target, change the following line in main():
+By default, the script contains example target hosts. To modify the target, change the following line in `main()`:
 
+```python
 icmpHelperPing.traceRoute("www.google.com")
+```
 
 Alternatively, you can trace routes to an IP address:
 
+```python
 icmpHelperPing.traceRoute("8.8.8.8")
+```
 
-How It Works
+## How It Works
 
-Packet Construction: The program builds an ICMP Echo Request packet with a unique identifier and sequence number.
+1. **Packet Construction**: The program builds an **ICMP Echo Request** packet with a unique identifier and sequence number.
+2. **Sending Requests**: The script sends ICMP packets with increasing TTL values (starting at 1).
+3. **Interpreting Responses**:
+   - If a router along the way returns a **TTL exceeded** message, the hop is recorded.
+   - If the target host responds with an **ICMP Echo Reply**, the route is complete.
+   - If a **destination unreachable** message is received, the path is blocked.
+4. **Displaying Results**: The program prints each hop’s IP, hostname (if available), RTT, and response type.
 
-Sending Requests: The script sends ICMP packets with increasing TTL values (starting at 1).
+## Example Output
 
-Interpreting Responses:
-
-If a router along the way returns a TTL exceeded message, the hop is recorded.
-
-If the target host responds with an ICMP Echo Reply, the route is complete.
-
-If a destination unreachable message is received, the path is blocked.
-
-Displaying Results: The program prints each hop’s IP, hostname (if available), RTT, and response type.
-
-Example Output
-
+```
 Tracing route to www.google.com:
 Hop: 1    TTL=1    RTT=12 ms    Type=11    Code=0    192.168.1.1
 Hop: 2    TTL=2    RTT=24 ms    Type=11    Code=0    203.0.113.1
 Hop: 3    TTL=3    RTT=36 ms    Type=0    Code=0    8.8.8.8 [google.com]
 Trace complete.
+```
 
-Error Handling
+## Error Handling
 
-If the request times out, the program prints:
+- If the request times out, the program prints:
+  ```
+  *        *        *        *        *    Request timed out.
+  ```
+- If the destination is unreachable, the response indicates the reason (e.g., **host unreachable** or **network unreachable**).
 
-*        *        *        *        *    Request timed out.
-
-If the destination is unreachable, the response indicates the reason (e.g., host unreachable or network unreachable).
-
-References
+## References
 
 This implementation was inspired by various sources:
 
-GeeksforGeeks Traceroute Implementation
+- [GeeksforGeeks Traceroute Implementation](https://www.geeksforgeeks.org/traceroute-implementation-on-python/)
+- [ICMP Parameters - IANA](https://www.iana.org/assignments/icmp-parameters/icmp-parameters.xhtml)
+- [YouTube Tutorial on ICMP and Traceroute](https://www.youtube.com/watch?v=zesTvBZCESk\&t=1041s)
+- [Packet Loss Calculation Guide](https://obkio.com/blog/how-to-measure-packet-loss)
 
-ICMP Parameters - IANA
-
-YouTube Tutorial on ICMP and Traceroute
-
-Packet Loss Calculation Guide
-
-License
+## License
 
 This project is open-source and free to use for educational and research purposes.
 
-Author
+## Author
 
-Developed by Brett Sullivan on February 7, 2024.
+Developed by **Brett Sullivan** on **February 7, 2024**.
+
